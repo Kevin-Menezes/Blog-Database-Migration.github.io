@@ -117,14 +117,14 @@
                     rollback to its original state. This makes it easier to again change the datatype of phone number back to int if the
                     code doesn’t work properly when phone number is set to varchar.</p>
                     
-                    <img src="sql1.png" alt="Code" class="mb-5">
+                    <img src="https://github.com/Kevin-Menezes/Blog-Database-Migration.github.io/blob/main/sql1.png" alt="Code" class="mb-5">
 
                     <p><b>A very simple solution for doing migrations that are backward compatible -</b></p>
                     <p>Create a new column in the same table → Make this column as varchar → Then copy data from the int column to the varchar column in batches →
                     In this way, you will have your existing system as a fall back and you can also implement your new changes in the
                     system.</p>
 
-                    <img src="sql2.png" alt="Code" class="mb-5">
+                    <img src="https://github.com/Kevin-Menezes/Blog-Database-Migration.github.io/blob/main/sql2.png" alt="Code" class="mb-5">
 
                     <br>
                     <h1 class="mt-3 mb-4">How to have <span class="blue-color">structured DB migrations</span> and track changes in the DB</h1>
