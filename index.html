@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Bootstrap CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+
+    <!-- Roboto -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+
+    <!-- Poppins -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300&display=swap" rel="stylesheet">
+
+    <title>Database Migrations - You need to be aware of this!</title>
+
+    <style>
+        .blue-color{
+            background-color:#C6E9FA;
+        }
+        .grey-color{
+            color: #b7b5b5;
+        }
+
+        img{
+            max-width: 100%;
+            height: auto;
+        }
+
+        .jumbotron-bg{
+            position: relative;
+            isolation: isolate;
+            background-image: url("database.png");
+            background-size: cover;
+        }
+
+        .jumbotron-bg::after{
+
+            content: '';
+            position:absolute;
+            inset: 0;
+            z-index: -1;
+            background-color: black;
+            opacity: 0.5;
+        }
+
+        h1, h4{
+            font-family: 'Roboto', sans-serif;
+        }
+
+        p, li{
+            font-family: 'Poppins', sans-serif;
+        }
+
+    </style>
+
+</head>
+<body>
+    
+        <!-- Jumbotron -->
+        <div style="padding: 10% 5% 10% 5%; " class="jumbotron-bg">
+            <h5 class="text-center grey-color">September 30, 2022</h5><br>
+            <h1 class="text-center text-white">Database Migrations - You need to be aware of this!</h1><br>
+            <h5 class="text-center grey-color">By Kevin Menezes</h5>
+        </div>
+
+        <!-- Questions -->
+        <div class="container mt-5">
+            <div class="row">  
+                <div class="col-6 col-md-3 mb-3 mb-md-0 text-center" >Why this matters?</div>
+                <div class="col-6 col-md-3 mb-3 mb-md-0 text-center" >What are the challenges?</div>
+                <div class="col-6 col-md-3 text-center" >Why should we care about it?</div>
+                <div class="col-6 col-md-3 text-center" >How should we implement it?</div>
+            </div>
+        </div>
+
+        
+        <br>
+        <div class="container mt-5" >
+            <div class="row justify-content-center">
+                <div class="col-md-6">
+
+                    <!-- Overview -->
+                    <h1 class="mb-4">Overview</h1>
+                    <p>To begin with, the term <b>“migration”</b> addressed in this context, refers solely to altering tables in the database, ie. <span class="blue-color">adding new columns to the tables in the database.</span></p>
+                    <p>Database migrations are performed through simple but important procedures. However, due to lack of awareness and proper practice of these procedures we tend to pay less attention towards its importance.</p>
+                    <p>It is easy to handle database migrations while working alone, but working in teams gets challenging if proper practice is not followed.</p>
+                    <p>Apart from working in teams, there are few other challenges of database migration which we will touch upon.</p>
+
+                    <!-- Challenges -->
+                    <br>
+                    <h1 class="mt-5 mb-4">Challenges</h1>
+                    <ul> 
+                        <li><b>DB migration is done manually</b> - We can’t completely automate this process here, hence we have to go and make changes ourselves</li><br>
+                        <li><b>It is error prone</b> - When we make changes in the migration process, we tend to make mistakes which can cause errors in the system</li><br>
+                        <li><b>Duplicate execution of queries</b> - Sometimes queries can get executed more than once, which can then change values in our database unexpectedly</li><br>
+                        <li><b>No tracking of changes done</b> - Changes done in schema by a particular person cannot be tracked when working in a team. Hence, if the system is not backward compatible, it gets tough to recover from these changes and the system might fail</li><br>
+                        <li><b>App is fully dependent on DB</b> - Changes done in DB should be in sync with the application, otherwise the app would not be able to deploy itself. Hence, migration should be done first and then the code should be changed and deployed</li><br>
+                        <li><b>Handling migration failures</b> - Many errors can occur if DB migration is not done properly. Hence, to resolve these errors, automated testing can be useful in detecting them. Deploying the code on another environment can also be useful to detect the reason for the failure of the code</li><br>
+                        <li><b>Time consuming for large tables</b> - Migration done on large tables requires a good amount of time to check if data is handled properly on a large scale</li><br>
+                        <li><b>Multiple environments and branches</b> - Working on many environments and branches in production and having to face all these challenges becomes even more tedious</li>
+                    </ul>
+
+                    <!-- Backward compatibility -->
+                    <br>
+                    <h1 class="mt-5 mb-4">Importance of having <span class="blue-color">backward compatible</span> DB migrations</h1>
+                    <p>Let’s take an example of a <span class="blue-color">phone_number</span> column in a table. We want to change its datatype from <span class="blue-color">int to varchar.</span></p>
+                    <p>We can do so by changing it in the table itself, but this will cause conflicts with the code which is written to handle phone
+                    numbers as int. When we make such changes we must ensure that whatever we do must be backward compatible and able to
+                    rollback to its original state. This makes it easier to again change the datatype of phone number back to int if the
+                    code doesn’t work properly when phone number is set to varchar.</p>
+                    
+                    <img src="/sql1.png" alt="Code" class="mb-5">
+
+                    <p><b>A very simple solution for doing migrations that are backward compatible -</b></p>
+                    <p>Create a new column in the same table → Make this column as varchar → Then copy data from the int column to the varchar column in batches →
+                    In this way, you will have your existing system as a fall back and you can also implement your new changes in the
+                    system.</p>
+
+                    <img src="/sql2.png" alt="Code" class="mb-5">
+
+                    <br>
+                    <h1 class="mt-3 mb-4">How to have <span class="blue-color">structured DB migrations</span> and track changes in the DB</h1>
+                    <p>These are few pointers to guide you to create a structured DB migration - </p>
+                    <li> <b>SQL Files</b> : These files contain the queries which you have performed on the DB</li><br>
+                    <li><b>Version control</b> : Git can be used to keep track of all the changes done in these files</li><br>
+                    <li><b>CLI Tool</b> : In order to use version control and track all these files we need to access them through a CLI tool</li>
+                    
+                    <!-- CLI Tools -->
+                    <br>
+                    <h1 class="mt-5 mb-4">How are CLI tools used efficiently for migration</h1>
+                    <h4><span class="blue-color">Liquibase, Flyway, Rails, Golang, Django</span></h4>
+
+                    <ul class="mt-4">
+                        <li>They can be used to apply 1 migration at a time</li>
+                        <li>They can be used to rollback to a previous version of migration</li>
+                        <li>To run and check if the migration works properly or not</li>
+                        <li>To check the difference between previous migrations and current one</li>
+                        <li>To generate final DB schema</li>
+                        <li>To deal with concurrent migrations</li>
+                    </ul>
+
+                    <!-- Best practices -->
+                    <br>
+                    <h1 class="mt-5 mb-4">Best practices while migrating databases</h1>
+                    <li>We need to track all the changes made in DB using <b>version control</b></li><br>
+                    
+                    <li>Every feature must have their own <b>single file</b>, then it becomes easier to track and debug individual features</li><br>
+                    
+                    <li>Breakdown bigger problems into smaller ones, in that way <b>rollback</b> becomes easier</li><br>
+                    
+                    <li>Use existing DB migration tools like <b>Flyway</b></li><br>
+                    
+                    <li>Don’t make go on making <b>changes</b> again and again to your migration script once you have completed it</li><br>
+                    
+                    <li><b>Automate</b> deployments,tests and rollbacks</li>
+
+                    <!-- Conclusion -->
+                    <br>
+                    <h1 class="mt-5 mb-4">Conclusion</h1>
+                    <p>Database migrations should not be taken for granted and should be performed using proper practices ie. version control and backward compatiblity.</p>
+                    <p>A structured database migration will ensure that your application and database work in sync.</p>
+                </div>
+            </div>
+        </div>
+
+</body>
+</html>
